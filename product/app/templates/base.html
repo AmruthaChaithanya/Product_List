@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} Product {% endblock %}</title>
+    <style>
+        /* simple global styles */
+        body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f9f9f9; color:#333; }
+        nav { background:#4eaecc; color:white; padding:10px; }
+        nav ul { list-style:none; margin:0; padding:0; display:flex; gap:15px; }
+        nav a { color:white; text-decoration:none; }
+        nav li { display:inline; }
+        h1, h2 { margin-top:0; }
+        .container { max-width:800px; margin:20px auto; padding:0 15px; }
+        table { width:100%; border-collapse:collapse; margin-top:15px; }
+        th, td { border:1px solid #ccc; padding:8px; text-align:left; }
+        th { background:#eee; }
+        form div { margin-bottom:10px; }
+        label { display:inline-block; width:100px; }
+        input[type=text], input[type=number], input[type=password], input[type=email] { padding:5px; width:calc(100% - 110px); }
+        button { padding:8px 12px; background:#4eaecc; border:none; color:white; cursor:pointer; }
+        button[type=button] { background:#888; }
+        button:hover { opacity:0.9; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <ul>
+        <li> Product List </li>
+
+        {% if user.is_authenticated %}
+            <li>Welcome {{ user.username }}</li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+            <li><a href="{% url 'add' %}">Add</a></li>
+            <li><a href="{% url 'index' %}">View Products</a></li>
+        {% else %}
+            <li><a href="{% url 'login' %}">Login</a></li>
+            <li><a href="{% url 'register' %}">Register</a></li>
+        {% endif %}
+        
+    </ul>
+</nav>
+<div class="container">
+    <h1>Hello Welcome to our store</h1>
+
+    {% block content %}
+    {% endblock %}
+</div>
+
+</body>
+</html>
