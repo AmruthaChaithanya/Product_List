@@ -1,11 +1,9 @@
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from .models import Product
-
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
-from django.contrib import messages
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -64,78 +62,42 @@ def delete(request, product_id):
     return redirect('index')
 
 # Authentication
-def register_view(request):
+def register(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        confirm_password = request.POST.get('confirm_password')
-
-        if password != confirm_password:
-            messages.error(request, "Passwords do not match")
-            return redirect('register')
-
-        if User.objects.filter(username=username).exists():
-            messages.error(request, "Username already exists")
-            return redirect('register')
-
-        User.objects.create_user(
-            username=username,
-            email=email,
-            password=password
-        )
-
-        messages.success(request, "Account created successfully")
-        return redirect('login')
-
-    return render(request, 'register.html')
-
-
-
-def login_view(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
-        user = authenticate(request, username=username, password=password)
-
-        if user is not None:
-            login(request, user)
-            return redirect('index')
-        else:
-            messages.error(request, "Invalid credentials")
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
             return redirect('login')
+    else:
+        form = UserCreationForm()
+    return render(request, 'register.html', {'form':form})
 
-    return render(request, 'login.html')
+def user_login(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('index')
+    else:
+        form = AuthenticationForm()
+    return render(request, 'login.html', {'form':form})
 
-
-
-def logout_view(request):
+@login_required
+def user_logout(request):
     logout(request)
     return redirect('login')
 
+@login_required
+def admin_page(request):
+    if request.user.is_superuser:
+        return HttpResponse("Welcome Admin")
+    else:
+        return HttpResponse("Only Admin Allowed")
 
-def reset_password(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        new_password = request.POST.get('new_password')
-        confirm_password = request.POST.get('confirm_password')
-
-        if new_password != confirm_password:
-            messages.error(request, "Passwords do not match")
-            return redirect('reset_password')
-
-        try:
-            user = User.objects.get(username=username)
-            user.set_password(new_password)
-            user.save()
-            messages.success(request, "Password updated successfully")
-            return redirect('login')
-        except User.DoesNotExist:
-            messages.error(request, "User does not exist")
-            return redirect('reset_password')
-
-    return render(request, 'reset_password.html')
 
 
    #=====================   REST API    ========================= 

@@ -5,23 +5,256 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %} Product {% endblock %}</title>
     <style>
-        /* simple global styles */
-        body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f9f9f9; color:#333; }
-        nav { background:#4eaecc; color:white; padding:10px; }
-        nav ul { list-style:none; margin:0; padding:0; display:flex; gap:15px; }
-        nav a { color:white; text-decoration:none; }
-        nav li { display:inline; }
-        h1, h2 { margin-top:0; }
-        .container { max-width:800px; margin:20px auto; padding:0 15px; }
-        table { width:100%; border-collapse:collapse; margin-top:15px; }
-        th, td { border:1px solid #ccc; padding:8px; text-align:left; }
-        th { background:#eee; }
-        form div { margin-bottom:10px; }
-        label { display:inline-block; width:100px; }
-        input[type=text], input[type=number], input[type=password], input[type=email] { padding:5px; width:calc(100% - 110px); }
-        button { padding:8px 12px; background:#4eaecc; border:none; color:white; cursor:pointer; }
-        button[type=button] { background:#888; }
-        button:hover { opacity:0.9; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* Navigation Bar */
+        nav {
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        nav li {
+            display: inline;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 8px 12px;
+            border-radius: 4px;
+        }
+
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        nav li:first-child {
+            font-size: 18px;
+            font-weight: bold;
+            flex-grow: 1;
+        }
+
+        /* Headings */
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            color: white;
+            margin-bottom: 25px;
+            font-size: 2em;
+            text-align: center;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Form Styles */
+        form {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            margin: 0 auto 30px;
+        }
+
+        form div {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input[type=text],
+        input[type=number],
+        input[type=password],
+        input[type=email] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        input[type=text]:focus,
+        input[type=number]:focus,
+        input[type=password]:focus,
+        input[type=email]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        /* Button Styles */
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 2px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button[type=button] {
+            background: linear-gradient(135deg, #999 0%, #666 100%);
+        }
+
+        /* Link Styles */
+        a {
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        form + a,
+        form + a + br + a {
+            display: inline-block;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .form-links {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .form-links a {
+            display: block;
+            color: white;
+            padding: 10px 0;
+            font-size: 0.95em;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-links a:hover {
+            text-decoration: underline;
+            transform: translateX(5px);
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background: white;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav ul {
+                gap: 15px;
+                padding: 0 10px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            h2 {
+                font-size: 1.5em;
+            }
+
+            form {
+                padding: 25px;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+
+            nav li:first-child {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            nav ul {
+                justify-content: center;
+            }
+        }
     </style>
 </head>
 <body>
